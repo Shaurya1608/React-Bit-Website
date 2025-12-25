@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+.custom-spotlight-card {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 18, 18, 0.95),
+    rgba(10, 10, 10, 0.95)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
