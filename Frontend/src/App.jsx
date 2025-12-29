@@ -1,5 +1,7 @@
 // src/App.jsx
 import { Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+
 import HomePage from "./pages/HomePage";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -14,29 +16,30 @@ import SignUp from "./pages/SignUp";
 
 function App() {
   return (
-    <Routes>
-      
-      {/* All “normal” pages share MainLayout with navbar */}
-      <Route>
+    <>
+      {/* ✅ Toast System (works everywhere) */}
+      <Toaster position="top-right" />
+
+      {/* ✅ App Routes */}
+      <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+
         <Route path="/products" element={<Products />} />
-         <Route path="/product/:id" element={<AddToCart />} />
-         <Route path="/order" element={<Orders />} />
-        <Route path="/purchase" element={<PurchasePage />} />
-        <Route path="/admin" element={<Admin />} />
         <Route path="/products/mens" element={<ProductMens />} />
+        <Route path="/product/:id" element={<AddToCart />} />
+
+        <Route path="/purchase" element={<PurchasePage />} />
+        <Route path="/order" element={<Orders />} />
+
+        <Route path="/admin" element={<Admin />} />
+
+        {/* Auth */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUp />} />
-        
-        
-
-      </Route>
-
-      {/* Example: a page WITHOUT navbar (e.g. /landing) */}
-      {/* <Route path="/landing" element={<LandingPage />} /> */}
-    </Routes>
+      </Routes>
+    </>
   );
 }
 

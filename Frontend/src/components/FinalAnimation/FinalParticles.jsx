@@ -35,18 +35,6 @@ const FinalParticles = () => {
             textAlign="center"
             />
          </div>
-
-         
-       
-         <div className=" pt-8 leading-10 flex gap-8 pl-2.5">
-          <TargetCursor 
-          spinDuration={2}
-          hideDefaultCursor={true}
-          parallaxOn={true}
-        />
-         <button className="cursor-target px-10 border-2 rounded-full bg-white text-black font-bold hover:bg-black hover:text-white cursor-pointer"> Get Started </button>
-         <button className=" cursor-target px-10 border-2 rounded-full font-bold cursor-pointer bg-blue-300"> Learn More </button> 
-         </div>
          
         </div>
     <div style={{ width: '100%', height: '800px', position: 'relative' }}>

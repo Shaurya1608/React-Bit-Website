@@ -1,113 +1,190 @@
-// LoginLeft.jsx - FIXED
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Lightning from "../components/animations/Lightning";
 import TopHeroText from "../components/Auth/TopHeroText";
 import RightSideLogin from "../components/Auth/RightSideLogin";
+import { signup } from "../services/auth";
+import toast from "react-hot-toast";
 
+const SignUp = ({ goToLogin }) => {   // 👈 receive slide action
+  const [loading, setLoading] = useState(false);
 
-const SignUp = () => {
-  const [rememberMe, setRememberMe] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: ""
+  });
+
+  const navigate = useNavigate();
+
+  const handleSignup = async () => {
+
+    toast.dismiss();
+
+    if (!form.name || !form.email || !form.password) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await signup({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        password: form.password
+      });
+
+      localStorage.setItem("token", res.data.token);
+
+      toast.success("Account created 🎉 Please log in");
+
+      navigate("/login");
+
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Signup failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="h-screen flex relative overflow-hidden">
-      {/* Lightning background - FULL SCREEN */}
+
+      {/* Background Lightning */}
       <div className="absolute inset-0 z-0">
         <Lightning
-          hue={920} 
-          xOffset={-1}
+          hue={920}
+          xOffset={-0.5}
           speed={0.8}
           intensity={0.3}
           size={0.8}
         />
       </div>
 
-      {/* Right side - Image */}
-      <div className="w-1/2 h-screen relative overflow-hidden">
+      {/* LEFT — IMAGE (moves to LEFT on signup) */}
+      <div className="hidden md:block w-1/2 h-screen relative overflow-hidden">
         <RightSideLogin />
       </div>
 
-          {/* Left side - Login form (on top of lightning) */}
-      <div className="h-screen w-1/2  flex flex-col justify-center items-center p-8 relative z-100">
+      {/* RIGHT — FORM */}
+      <div className="h-screen w-full md:w-1/2 flex flex-col justify-center items-center p-8 relative z-100">
+
         <TopHeroText />
-        
-        <div className="w-full max-w-md mt-8 space-y-6  rounded-3xl p-8 ">
+
+        {/* Back Button */}
+        <button
+          onClick={() => navigate("/")}
+          className="absolute top-5 left-5 flex items-center gap-2 
+                     text-sm font-medium px-3 py-2 rounded-lg
+                     border border-white/30 text-white
+                     hover:bg-white/10 transition cursor-pointer"
+        >
+          ← Back
+        </button>
+
+        {/* Card */}
+        <div className="w-full max-w-md mt-8 rounded-3xl p-8">
+
           <h1 className="text-3xl font-bold text-white mb-6 text-center">
-            Register
+            Create Account
           </h1>
 
-           <div>
-            <label className="text-xs font-bold mb-2 block text-white">
-              Name
-            </label>
-            <input
-              type="name"
-              placeholder="Enter your full name"
-              className=" text-white rounded-xl py-3 px-4 w-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent "
-            />
-          </div>
+          {/* FORM */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSignup();
+            }}
+            className="space-y-6"
+          >
 
-          {/* Email */}
-          <div>
-            <label className="text-xs font-bold mb-2 block text-white">
-              Email Address
-            </label>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className=" text-white rounded-xl py-3 px-4 w-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent "
-            />
-          </div>
+            {/* Name */}
+            <div>
+              <label className="text-xs font-bold mb-2 block text-white">
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={form.name}
+                onChange={(e) =>
+                  setForm({ ...form, name: e.target.value })
+                }
+                className="bg-white/5 text-white rounded-xl py-3 px-4 w-full 
+                           border border-gray-600
+                           focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
 
-          {/* Password */}
-          <div>
-            <label className="text-xs font-bold mb-2 block text-white">
-              Password
-            </label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              className=" text-white rounded-xl py-3 px-4 w-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
+            {/* Email */}
+            <div>
+              <label className="text-xs font-bold mb-2 block text-white">
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={form.email}
+                onChange={(e) =>
+                  setForm({ ...form, email: e.target.value })
+                }
+                className="bg-white/5 text-white rounded-xl py-3 px-4 w-full 
+                           border border-gray-600
+                           focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
 
-          {/* Remember Me */}
-          <div className="flex items-center gap-2 mb-6">
-            <input
-              id="remember"
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <label
-              htmlFor="remember"
-              className="text-sm text-gray-400 cursor-pointer"
+            {/* Password */}
+            <div>
+              <label className="text-xs font-bold mb-2 block text-white">
+                Password
+              </label>
+              <input
+                type="password"
+                value={form.password}
+                onChange={(e) =>
+                  setForm({ ...form, password: e.target.value })
+                }
+                className="bg-white/5 text-white rounded-xl py-3 px-4 w-full 
+                           border border-gray-600
+                           focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-4 rounded-2xl font-semibold text-lg
+                text-white border border-white/20 transition
+                ${
+                  loading
+                    ? "bg-white/30 cursor-not-allowed"
+                    : "bg-white/10 hover:bg-white/20"
+                }`}
             >
-              Remember me
-            </label>
+              {loading ? "Creating account..." : "Sign Up"}
+            </button>
+          </form>
+
+          {/* 🔁 SWITCH TO LOGIN USING SWIPER */}
+          <div className="text-center space-y-2 pt-4">
+            <button
+              type="button"
+              onClick={goToLogin}
+              className="text-white font-semibold hover:text-blue-200 text-sm"
+            >
+              Already have an account? Log In
+            </button>
           </div>
 
-          {/* Button */}
-          <button className="cursor-pointer text-white w-full py-4 rounded-2xl font-semibold text-lg transition-all hover:text-blue-200">
-            Sign In
-          </button>
-
-          {/* Links */}
-          <div className="text-center space-y-2 pt-4 ">
-            <NavLink 
-              to="/signup"
-              className="text-white font-semibold hover:text-blue-200 text-sm block"
-            >
-              Don't have an account? Sign Up
-            </NavLink>
-            <NavLink 
-              to="/forgot-password" 
-              className="text-white font-semibold hover:text-blue-200 text-sm block"
-            >
-              Forgot Password?
-            </NavLink>
-          </div>
         </div>
       </div>
     </div>
@@ -115,3 +192,4 @@ const SignUp = () => {
 };
 
 export default SignUp;
+  
