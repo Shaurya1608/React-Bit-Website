@@ -13,6 +13,7 @@ import Admin from "./pages/Admin";
 import ProductMens from "./pages/ProductMens";
 import LoginPage from "./pages/LoginPage";
 import SignUp from "./pages/SignUp";
+import CartPage from "./pages/cartPage";
 
 function App() {
   return (
@@ -37,7 +38,10 @@ function App() {
 
         {/* Auth */}
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp />} /> 
+
+
+        <Route path="/cart" element={<CartPage />} />   
       </Routes>
     </>
   );

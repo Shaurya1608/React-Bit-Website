@@ -17,8 +17,17 @@ const LoginLeft = ({ goToSignup }) => {   // 👈 receive slide action
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    if (!form.email || !form.password) {
-      toast.error("Email & password are required");
+
+
+   toast.dismiss();
+
+    if ( !form.email || !form.password) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
       return;
     }
 
