@@ -1,12 +1,11 @@
-// RightSideLogin.jsx
 import React from "react";
 
 const RightSideLogin = () => {
   return (
     <div
       className="
-        hidden        /* ❌ hidden on small screens */
-        md:flex       /* ✅ visible from md and above */
+        hidden        
+        md:flex       
         h-full 
         w-full 
         relative

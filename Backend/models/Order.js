@@ -7,9 +7,23 @@ const orderSchema = new mongoose.Schema(
       ref: "Product",
       required: true,
     },
-    name: String,
-    email: String,
-    amount: Number,
+
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    amount: {
+      type: Number,
+      required: true,
+    },
+
+    status: {
+      type: String,
+      enum: ["pending", "processing", "shipped", "delivered"],
+      default: "pending",
+    },
   },
   { timestamps: true }
 );
